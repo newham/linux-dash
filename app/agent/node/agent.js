@@ -32,7 +32,7 @@ function sentMsg(type, msg) {
     if (sent_time[type] == 0 || (now - sent_time[type]) / 1000 > conf.timeout) {
         sent_time[type] = now
         console.log(new Date().toLocaleDateString(), msg)
-        mail.sent_mail(conf.email, conf.title, msg)
+        mail.sent_mail(conf.emails, conf.title, msg)
     }
 }
 

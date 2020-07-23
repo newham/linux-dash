@@ -4,13 +4,13 @@ var alerts = {
     'mem': '90%'
 }
 
-var email = 'onlyonemen@163.com'
+var emails = ['onlyonemen@163.com', '448321473@qq.com']
 
 var title = 'icab生产告警'
 
 const timeout = 1800 //秒，30分钟
 
 exports.alerts = alerts
-exports.email = email
+exports.emails = emails
 exports.timeout = timeout
 exports.title = title
