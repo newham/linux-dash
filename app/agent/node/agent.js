@@ -32,7 +32,7 @@ function sentMsg(type, msg) {
     if (sent_time[type] == 0 || (now - sent_time[type]) / 1000 > conf.timeout) {
         sent_time[type] = now
         console.log(new Date().toLocaleDateString(), msg)
-        mail.sent_mail(conf.emails, conf.title, msg)
+            // mail.sent_mail(conf.emails, conf.title, msg)
     }
 }
 
@@ -46,8 +46,9 @@ function filterTask() {
         var max = conf.alerts.disk
         for (i in outputs) {
             var output = outputs[i]
-            if (output['used%'] > max) {
-                var msg = `[ALERT]:[disk:${output['mounted']}][${output['used%']}]>[${max}]`
+            var value = parseInt(output['used%'].replace('%', '')) //将10%转换为10
+            if (value > max) {
+                var msg = `[ALERT]:[disk:${output['mounted']}][${value}%]>[${max}%]`
                 sentMsg('disk', msg)
             }
         }
@@ -59,10 +60,10 @@ function filterTask() {
             console.log(outputs)
             return
         }
-        var value = outputs + '%'
+        var value = outputs
         var max = conf.alerts.cpu
         if (value > max) {
-            var msg = `[ALERT]:[cpu][${value}]>[${max}]`
+            var msg = `[ALERT]:[cpu][${value}%]>[${max}%]`
             sentMsg('cpu', msg)
         }
     })
@@ -75,9 +76,9 @@ function filterTask() {
         }
         outputs = JSON.parse(outputs)
         var max = conf.alerts.mem
-        var value = parseInt(outputs.used / outputs.total * 100) + '%'
+        var value = parseInt(outputs.used / outputs.total * 100)
         if (value > max) {
-            var msg = `[ALERT]:[mem][${value}]>[${max}]`
+            var msg = `[ALERT]:[mem][${value}%]>[${max}%]`
             sentMsg('mem', msg)
         }
     })
@@ -85,7 +86,7 @@ function filterTask() {
 
 
 // 每x1000秒执行一次
-setInterval(filterTask, 500)
+setInterval(filterTask, 1000)
 
 //getPluginData('cpu_info', (code, output) => {
 //    console.log(code, output)
