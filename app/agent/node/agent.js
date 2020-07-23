@@ -3,7 +3,7 @@ var conf = require('./conf')
     // const { config } = require('yargs')
 var spawn = require('child_process').spawn
 
-var nixJsonAPIScript = '../../linux_json_api.sh'
+var nixJsonAPIScript = '../../server/linux_json_api.sh'
 
 var sent_time = { cpu: 0, mem: 0, disk: 0 }
 
