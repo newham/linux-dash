@@ -28,11 +28,12 @@ function getPluginData(pluginName, callback) {
 }
 
 function sentMsg(type, msg) {
-    var now = Date.parse(new Date());
+    var d = new Date()
+    var now = Date.parse(d);
     if (sent_time[type] == 0 || (now - sent_time[type]) / 1000 > conf.timeout) {
         sent_time[type] = now
-        console.log(new Date().toLocaleDateString(), msg)
-            // mail.sent_mail(conf.emails, conf.title, msg)
+        console.log(`${d.getHours()}:${d.getMinutes()}/${d.toLocaleDateString()}`, msg)
+        mail.sent_mail(conf.emails, conf.title, msg)
     }
 }
 
@@ -44,6 +45,10 @@ function filterTask() {
         }
         outputs = JSON.parse(outputs)
         var max = conf.alerts.disk
+        if (max < 0) { //-1表示不监控
+            // console.log('pass')
+            return
+        }
         for (i in outputs) {
             var output = outputs[i]
             var value = parseInt(output['used%'].replace('%', '')) //将10%转换为10
@@ -62,6 +67,10 @@ function filterTask() {
         }
         var value = outputs
         var max = conf.alerts.cpu
+        if (max < 0) { //-1表示不监控
+            // console.log('pass')
+            return
+        }
         if (value > max) {
             var msg = `[ALERT]:[cpu][${value}%]>[${max}%]`
             sentMsg('cpu', msg)
@@ -76,6 +85,10 @@ function filterTask() {
         }
         outputs = JSON.parse(outputs)
         var max = conf.alerts.mem
+        if (max < 0) { //-1表示不监控
+            // console.log('pass')
+            return
+        }
         var value = parseInt(outputs.used / outputs.total * 100)
         if (value > max) {
             var msg = `[ALERT]:[mem][${value}%]>[${max}%]`

@@ -1,6 +1,6 @@
 // 百分比
 var alerts = {
-    'cpu': 90,
+    'cpu': -1,
     'disk': 80,
     'mem': 90
 }
